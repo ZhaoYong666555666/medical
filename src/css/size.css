@@ -1,0 +1,59 @@
+/*基础选择框*/
+.basic-select-width,
+.basic-input-width {
+    width: 125px !important;
+}
+
+/*加长 ，适合 7 个字*/
+.lengthen-input-width {
+    width: 140px !important;
+}
+
+/*十个字*/
+.longer-input-width {
+    width: 160px !important;
+}
+
+.lengthen-select-width {
+    width: 150px !important;
+}
+
+/*加长 ，适合 7 个字*/
+.longer-select-width {
+    width: 160px !important;
+}
+
+/*日期选择范围*/
+.basic-range-picker-width {
+    width: 240px !important;
+}
+
+/*特殊的过长的行*/
+.a-input-group::after {
+    clear: both;
+    display: block;
+    content: '';
+}
+
+/*按钮组的基础间距*/
+.a-input-group + .a-input-group {
+    margin-bottom: 10px;
+}
+
+.a-input-group > .basic-input-width,
+.a-input-group > .basic-select-width,
+.a-input-group > .lengthen-select-width,
+.a-input-group > .longer-select-width,
+.a-input-group > .basic-range-picker-width,
+.a-input-group > .lengthen-input-width,
+.a-input-group > .longer-input-width,
+.a-input-group > .basic-button-width {
+    float: left;
+    margin-right: 8px;
+    margin-bottom: 10px;
+}
+
+/*在新增、编辑页面的form表单中的普通输入框*/
+.form .add-form-input, .add-form-input {
+    width: 200px;
+}

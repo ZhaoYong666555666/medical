@@ -1,0 +1,2033 @@
+<template>
+    <div class="layout-content-inner-main patient-basic-info-like-wrap">
+        <div class="a-input-group">
+            <!--返回按钮-->
+            <GoBackButton/>
+            <a-button class="basic-button-width" type="primary" v-print="printObj">打印</a-button>
+            <a-button class="basic-button-width" type="primary" @click="saveScreening" v-if="!assessmentDetailId">保存
+            </a-button>
+            <a-select
+                    class="basic-range-picker-width"
+                    placeholder="请选择主管医生"
+                    v-model="tableTypeSelect"
+                    :disabled="!!assessmentDetailId"
+            >
+                <a-select-option :value="1">微型营养评价表</a-select-option>
+                <a-select-option :value="2">一般评估表</a-select-option>
+                <a-select-option :value="3">PG - SGA主观营养状况评估</a-select-option>
+            </a-select>
+        </div>
+        <div class="patient-basic-info-like">
+            <div id="printContent">
+                <ScreeningBasicInfo v-if="true"/>
+                <br>
+                <div class="table-flex-title table-group-title no-border-bottom">
+                    <div style="width: 201px;">名称</div>
+                    <div>评订内容</div>
+                </div>
+                <!--微型营养评价表-->
+                <div v-if="tableTypeSelect === 1">
+                    <!--1-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>1、 既往3个月内，是否因食欲下降、咀嚼或吞咽等消化问题导致食物摄入减少？</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeOneList[0]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeOneListData[0]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--2-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>2、 最近三个月内体重是否减轻</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeOneList[1]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeOneListData[1]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--3-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>3、活动情况如何</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeOneList[2]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeOneListData[2]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--4-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>4、在过去3个月内是否受过心里创伤或x患急性疾病？</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeOneList[3]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeOneListData[3]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--5-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>5、是否有神经心理问题</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeOneList[4]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeOneListData[4]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--6-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>6、BMI（kg/m2）是多少</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeOneList[5]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeOneListData[5]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--7-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>7、是独立生活吗（不住在养老机构或医院）？</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeOneList[6]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeOneListData[6]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--8-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>8、每日应用处方药超过三种？</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeOneList[7]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeOneListData[7]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--9-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>9、有压力性疼痛或皮肤性溃疡吗？</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeOneList[8]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeOneListData[8]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--10-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>10、患者每日完成几餐？</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeOneList[9]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeOneListData[9]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--11-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>11、每日至少一份奶制品（牛奶、奶酪、酸奶）？</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeOneList[10]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeOneListData[10]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--12-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>12、每周2 - 3份豆制品或鸡蛋</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeOneList[11]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeOneListData[11]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--13-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>13、每日吃肉、鱼或家禽</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeOneList[12]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeOneListData[12]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--14-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>14、每日能吃2份以上的水果或蔬菜吗？</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeOneList[13]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeOneListData[13]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--15-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>15、每日喝多少杯液体（水、果汁、咖啡、茶、奶等）？</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeOneList[14]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeOneListData[14]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--16-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>16、喂养方式</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeOneList[15]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeOneListData[15]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--17-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>17、对营养状态的自我评价如何？</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeOneList[16]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId">
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeOneListData[16]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--18-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>18、与同龄人相比，你如何评价自己的健康状况？</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeOneList[17]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeOneListData[17]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--19-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>19、中臀围（AMC）是多少cm</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeOneList[18]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeOneListData[18]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--20-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>20、排肠肌围（cc）是多少？cm</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeOneList[19]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeOneListData[19]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                </div>
+                <!--一般评估表-->
+                <div v-if="tableTypeSelect === 2">
+                    <!--1-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>1、精神状况</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeTwoList[0]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeTwoListData[0]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--2-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>2、 进食途径</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeTwoList[1]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeTwoListData[1]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--3-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>3、大便次数</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeTwoList[2]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeTwoListData[2]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--4-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>4、大便形状</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeTwoList[3]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeTwoListData[3]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                    <!--5-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>5、腹痛、胀痛（可多选）</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-checkbox-group v-model="typeTwoList[4]"
+                                              class="radio-group"
+                                              :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeTwoListData[4]"
+                                    >
+                                        <a-checkbox :value="item">{{item.label}}</a-checkbox>
+                                    </li>
+                                </ul>
+                            </a-checkbox-group>
+                        </div>
+                    </a-row>
+                    <!--6-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div>6、膳食调查</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <a-radio-group v-model="typeTwoList[5]"
+                                           class="radio-group"
+                                           :disabled="!!assessmentDetailId"
+                            >
+                                <ul class="radio-group-list">
+                                    <li class="radio-group-item"
+                                        v-for="item in typeTwoListData[5]"
+                                    >
+                                        <a-radio :value="item">{{item.label}}</a-radio>
+                                    </li>
+                                </ul>
+                            </a-radio-group>
+                        </div>
+                    </a-row>
+                </div>
+                <!--PG - SGA主观营养状况评估-->
+                <div v-if="tableTypeSelect === 3">
+                    <!--1-->
+                    <a-row v-if="true" type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div class="text-align-center">体重评分</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <ul class="radio-group-list">
+                                <li class="radio-group-item">
+                                    <a-space>
+                                        <span>目前患者的体重约为</span>
+                                        <a-input class="basic-input-width" placeholder="请输入体重" suffix="kg" size="small"
+                                                 v-model="typeThreeList.nowWeight"
+                                                 :disabled="!!assessmentDetailId"
+                                        />
+                                    </a-space>
+                                </li>
+                                <li class="radio-group-item">
+                                    <a-space>
+                                        <span>目前患者的身高约为</span>
+                                        <a-input class="basic-input-width" placeholder="请输入身高" suffix="cm" size="small"
+                                                 v-model="typeThreeList.nowHeight"
+                                                 :disabled="!!assessmentDetailId"
+                                        />
+                                    </a-space>
+                                </li>
+                                <li class="radio-group-item">
+                                    <a-space>
+                                        <span>一个月前患者的体重约为</span>
+                                        <a-input class="basic-input-width" placeholder="请输入体重" suffix="kg" size="small"
+                                                 v-model="typeThreeList.oneagoWeight"
+                                                 :disabled="!!assessmentDetailId"
+                                        />
+                                    </a-space>
+                                </li>
+                                <li class="radio-group-item">
+                                    <a-space>
+                                        <span>六个月前患者的体重约为</span>
+                                        <a-input class="basic-input-width" placeholder="请输入身高" suffix="cm" size="small"
+                                                 v-model="typeThreeList.sixagoWeight"
+                                                 :disabled="!!assessmentDetailId"
+                                        />
+                                    </a-space>
+                                </li>
+                                <li class="radio-group-item">
+                                    <a-space>
+                                        <span>在过去的两周，患者的体重</span>
+                                    </a-space>
+                                    <a-radio-group v-model="typeThreeList.weightCondition"
+                                                   :disabled="!!assessmentDetailId"
+                                                   class="radio-group">
+                                        <a-radio v-for="item in typeThreeListData.weightCondition"
+                                                 :value="item.id"
+                                        >{{item.label}}
+                                        </a-radio>
+                                    </a-radio-group>
+                                </li>
+                            </ul>
+                        </div>
+                    </a-row>
+                    <!--2-->
+                    <a-row v-if="true" type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div class="text-align-center">进食情况评分</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <ul class="radio-group-list">
+                                <li class="radio-group-item radio-group-item-title">
+                                    1、过去的1个月以来，患者的进食情况与平时情况相比（以最高分选项为本项计分）
+                                </li>
+                                <li class="radio-group-item">
+                                    <a-radio-group v-model="typeThreeList.eatingSituation"
+                                                   class="radio-group"
+                                                   :disabled="!!assessmentDetailId"
+                                    >
+                                        <a-radio v-for="item in typeThreeListData.eatingSituation"
+                                                 :value="item.id"
+                                        >{{item.label}}
+                                        </a-radio>
+                                    </a-radio-group>
+                                </li>
+                                <li class="radio-group-item radio-group-item-title">2、患者目前进食</li>
+                                <li class="radio-group-item">
+                                    <a-radio-group v-model="typeThreeList.eatingNow"
+                                                   class="radio-group"
+                                                   :disabled="!!assessmentDetailId"
+                                    >
+                                        <a-radio v-for="item in typeThreeListData.eatingNow"
+                                                 :value="item.id"
+                                        >{{item.label}}
+                                        </a-radio>
+                                    </a-radio-group>
+                                </li>
+                            </ul>
+                        </div>
+                    </a-row>
+                    <!--3-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div class="text-align-center">症状评分</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <ul class="radio-group-list">
+                                <li class="radio-group-item radio-group-item-title">1、近2周来，患者有以下的问题，影响患者摄入足够的饮食（多选，累计计分）
+                                </li>
+                                <li class="radio-group-item">
+                                    <b>❌需要检查❌️</b>
+                                    <a-checkbox-group class="radio-group" v-model="typeThreeList.symptom"
+                                                      :disabled="!!assessmentDetailId"
+                                    >
+                                        <a-checkbox v-for="item in typeThreeListData.symptom"
+                                                    :value="item.id"
+                                        >
+                                            <a-space v-if="item.hasInput">
+                                                <a-space>
+                                                    <span>{{item.label}}</span>
+                                                    <a-input :placeholder="item.placeholder" size="small"
+                                                             v-model="item.input"
+                                                    />
+                                                    <span>{{item.suffix}}</span>
+                                                </a-space>
+                                            </a-space>
+                                            <span v-else>{{item.label}}</span>
+                                        </a-checkbox>
+                                    </a-checkbox-group>
+                                </li>
+                            </ul>
+                        </div>
+                    </a-row>
+                    <!--4-->
+                    <a-row v-if="true" type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div class="text-align-center">活动和身体功能情况评估</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <ul class="radio-group-list">
+                                <li class="radio-group-item radio-group-item-title">1、在过去的1个月，患者的活动（单选）</li>
+                                <li class="radio-group-item">
+                                    <a-radio-group v-model="typeThreeList.activityBodyfunction"
+                                                   :disabled="!!assessmentDetailId"
+                                    >
+                                        <a-radio v-for="item in typeThreeListData.activityBodyfunction"
+                                                 :value="item.id"
+                                        >{{item.label}}
+                                        </a-radio>
+                                    </a-radio-group>
+                                </li>
+                            </ul>
+                        </div>
+                    </a-row>
+                    <!--5-->
+                    <a-row type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div class="text-align-center">疾病与营养需求的关系评分</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <ul class="radio-group-list">
+                                <li class="radio-group-item radio-group-item-title">1、相关诊断（特定，多选）
+                                </li>
+                                ❌需要检查❌
+                                <li class="radio-group-item">
+                                    <a-checkbox-group class="radio-group" v-model="typeThreeList.disease"
+                                                      :disabled="!!assessmentDetailId"
+                                    >
+                                        <a-checkbox v-for="item in typeThreeListData.disease"
+                                                    :value="item.id"
+                                        >
+                                            <a-space v-if="item.hasInput">
+                                                <a-space>
+                                                    <span>{{item.label}}</span>
+                                                    <a-input :placeholder="item.placeholder" size="small"
+                                                             v-model="item.input"
+                                                    />
+                                                    <span>{{item.suffix}}</span>
+                                                </a-space>
+                                            </a-space>
+                                            <span v-else>{{item.label}}</span>
+                                        </a-checkbox>
+                                    </a-checkbox-group>
+                                </li>
+                                <li class="radio-group-item radio-group-item-title">2、年龄</li>
+                                <li class="radio-group-item">
+                                    <a-space>
+                                        <a-input placeholder="请输入年龄"
+                                                 size="small"
+                                                 v-model="typeThreeList.diseaseAge"
+                                                 :disabled="!!assessmentDetailId"
+                                        />
+                                    </a-space>
+                                </li>
+                                <li class="radio-group-item radio-group-item-title">3、原发疾病分期</li>
+                                <li class="radio-group-item">
+                                    ❌需要检查❌
+                                    <a-checkbox-group class="radio-group"
+                                                      v-model="typeThreeList.diseaseStage"
+                                                      :disabled="!!assessmentDetailId"
+                                    >
+                                        <a-checkbox v-for="item in typeThreeListData.diseaseStage"
+                                                    :value="item.id"
+                                        >
+                                            <a-space v-if="item.hasInput">
+                                                <a-space>
+                                                    <span>{{item.label}}</span>
+                                                    <a-input :placeholder="item.placeholder" size="small"
+                                                             v-model="item.input"
+                                                    />
+                                                    <span>{{item.suffix}}</span>
+                                                </a-space>
+                                            </a-space>
+                                            <span v-else>{{item.label}}</span>
+                                        </a-checkbox>
+                                    </a-checkbox-group>
+                                </li>
+                                <li class="radio-group-item radio-group-item-title">4、放疗次数</li>
+                                <li class="radio-group-item">
+                                    <a-space>
+                                        <a-input placeholder="请输入放疗次数" size="small"
+                                                 v-model="typeThreeList.radiotherapyCount"
+                                                 :disabled="!!assessmentDetailId"
+                                        />
+                                    </a-space>
+                                </li>
+                            </ul>
+                        </div>
+                    </a-row>
+                    <!--6-->
+                    <a-row v-if="true" type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div class="text-align-center">代谢方面需求评估</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <ul class="radio-group-list">
+                                <li class="radio-group-item radio-group-item-title">1、发热</li>
+                                <li class="radio-group-item">
+                                    <a-radio-group v-model="typeThreeList.hot"
+                                                   :disabled="!!assessmentDetailId"
+                                    >
+                                        <a-radio v-for="item in typeThreeListData.hot"
+                                                 :value="item.id"
+                                        >{{item.label}}
+                                        </a-radio>
+                                    </a-radio-group>
+                                </li>
+                                <li class="radio-group-item radio-group-item-title">2、持续发热时间</li>
+                                <li class="radio-group-item">
+                                    <a-radio-group v-model="typeThreeList.lastHottime"
+                                                   :disabled="!!assessmentDetailId"
+                                    >
+                                        <a-radio v-for="item in typeThreeListData.lastHottime"
+                                                 :value="item.id"
+                                        >{{item.label}}
+                                        </a-radio>
+                                    </a-radio-group>
+                                </li>
+                                <li class="radio-group-item radio-group-item-title">3、是否使用激素（如波尼松或相当剂量的其他激素/天）</li>
+                                <li class="radio-group-item">
+                                    <a-radio-group v-model="typeThreeList.isuseHormone"
+                                                   :disabled="!!assessmentDetailId"
+                                    >
+                                        <a-radio v-for="item in typeThreeListData.isuseHormone"
+                                                 :value="item.id"
+                                        >{{item.label}}
+                                        </a-radio>
+                                    </a-radio-group>
+                                </li>
+                            </ul>
+                        </div>
+                    </a-row>
+                    <!--7-->
+                    <a-row v-if="true" type="flex" justify="space-between" align="middle" class="radio-group-row">
+                        <div class="radio-group-item-label">
+                            <div class="text-align-center">体格检查评分</div>
+                        </div>
+                        <div class="radio-group-item-content">
+                            <ul class="radio-group-list">
+                                <li class="radio-group-item" style="padding:0;">
+                                    <a-row type="flex" justify="space-between" align="middle">
+                                        <div class="radio-group-item-label">
+                                            <div class="text-align-center">脂肪储备</div>
+                                        </div>
+                                        <div class="radio-group-item-content">
+                                            <ul class="radio-group-list">
+                                                <li class="radio-group-item radio-group-item-title">1、眼眶脂肪垫
+                                                </li>
+                                                <li class="radio-group-item">
+                                                    <a-radio-group v-model="typeThreeList.fatreserveorbitalfatpad"
+                                                                   :disabled="!!assessmentDetailId"
+                                                    >
+                                                        <a-radio v-for="item in typeThreeListData.fourKindsOf"
+                                                                 :value="item.id"
+                                                        >{{item.label}}
+                                                        </a-radio>
+                                                    </a-radio-group>
+                                                </li>
+                                                <li class="radio-group-item radio-group-item-title">2、三头肌皮褶厚度
+                                                </li>
+                                                <li class="radio-group-item">
+                                                    <a-radio-group v-model="typeThreeList.fatreservetricepsskinfold"
+                                                                   :disabled="!!assessmentDetailId"
+                                                    >
+                                                        <a-radio v-for="item in typeThreeListData.fourKindsOf"
+                                                                 :value="item.id"
+                                                        >{{item.label}}
+                                                        </a-radio>
+                                                    </a-radio-group>
+                                                </li>
+                                                <li class="radio-group-item radio-group-item-title">3、下肋脂肪厚度
+                                                </li>
+                                                <li class="radio-group-item">
+                                                    <a-radio-group
+                                                            v-model="typeThreeList.fatreservelowerribfatthickness"
+                                                            :disabled="!!assessmentDetailId"
+                                                    >
+                                                        <a-radio v-for="item in typeThreeListData.fourKindsOf"
+                                                                 :value="item.id"
+                                                        >{{item.label}}
+                                                        </a-radio>
+                                                    </a-radio-group>
+                                                </li>
+                                                <li class="radio-group-item radio-group-item-title">4、总体脂肪缺乏程度
+                                                </li>
+                                                <li class="radio-group-item">
+                                                    <a-radio-group v-model="typeThreeList.fatreservetotalfatdeficiency"
+                                                                   :disabled="!!assessmentDetailId"
+                                                    >
+                                                        <a-radio v-for="item in typeThreeListData.fourKindsOf"
+                                                                 :value="item.id"
+                                                        >{{item.label}}
+                                                        </a-radio>
+                                                    </a-radio-group>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </a-row>
+                                    <hr>
+                                    <a-row type="flex" justify="space-between" align="middle">
+                                        <div class="radio-group-item-label">
+                                            <div class="text-align-center">脂肪储备</div>
+                                        </div>
+                                        <div class="radio-group-item-content">
+                                            <ul class="radio-group-list">
+                                                <li class="radio-group-item radio-group-item-title">1、颞部（颞肌）
+                                                </li>
+                                                <li class="radio-group-item">
+                                                    <a-radio-group v-model="typeThreeList.muscleconditiontemporal"
+                                                                   :disabled="!!assessmentDetailId"
+                                                    >
+                                                        <a-radio v-for="item in typeThreeListData.fourKindsOf"
+                                                                 :value="item.id"
+                                                        >{{item.label}}
+                                                        </a-radio>
+                                                    </a-radio-group>
+                                                </li>
+                                                <li class="radio-group-item radio-group-item-title">2、锁骨部位（胸部三角肌）
+                                                </li>
+                                                <li class="radio-group-item">
+                                                    <a-radio-group v-model="typeThreeList.muscleconditioncollarbone"
+                                                                   :disabled="!!assessmentDetailId"
+                                                    >
+                                                        <a-radio v-for="item in typeThreeListData.fourKindsOf"
+                                                                 :value="item.id"
+                                                        >{{item.label}}
+                                                        </a-radio>
+                                                    </a-radio-group>
+                                                </li>
+                                                <li class="radio-group-item radio-group-item-title">3、肩部（三角肌）
+                                                </li>
+                                                <li class="radio-group-item">
+                                                    <a-radio-group v-model="typeThreeList.muscleconditionshoulder"
+                                                                   :disabled="!!assessmentDetailId"
+                                                    >
+                                                        <a-radio v-for="item in typeThreeListData.fourKindsOf"
+                                                                 :value="item.id"
+                                                        >{{item.label}}
+                                                        </a-radio>
+                                                    </a-radio-group>
+                                                </li>
+                                                <li class="radio-group-item radio-group-item-title">4、肩胛部（背阔肌、斜方肌、三角肌）
+                                                </li>
+                                                <li class="radio-group-item">
+                                                    <a-radio-group v-model="typeThreeList.muscleconditionshoulderblade"
+                                                                   :disabled="!!assessmentDetailId"
+                                                    >
+                                                        <a-radio v-for="item in typeThreeListData.fourKindsOf"
+                                                                 :value="item.id"
+                                                        >{{item.label}}
+                                                        </a-radio>
+                                                    </a-radio-group>
+                                                </li>
+                                                <li class="radio-group-item radio-group-item-title">5、手背骨间肌
+                                                </li>
+                                                <li class="radio-group-item">
+                                                    <a-radio-group
+                                                            v-model="typeThreeList.muscleconditiondorsalmuscleofTheBackOfTheHand"
+                                                            :disabled="!!assessmentDetailId"
+                                                    >
+                                                        <a-radio v-for="item in typeThreeListData.threeKindsOf"
+                                                                 :value="item.id"
+                                                        >{{item.label}}
+                                                        </a-radio>
+                                                    </a-radio-group>
+                                                </li>
+                                                <li class="radio-group-item radio-group-item-title">6、大腿（四头肌）
+                                                </li>
+                                                <li class="radio-group-item">
+                                                    <a-radio-group v-model="typeThreeList.muscleconditionthigh"
+                                                                   :disabled="!!assessmentDetailId"
+                                                    >
+                                                        <a-radio v-for="item in typeThreeListData.twoKindsOf"
+                                                                 :value="item.id"
+                                                        >{{item.label}}
+                                                        </a-radio>
+                                                    </a-radio-group>
+                                                </li>
+                                                <li class="radio-group-item radio-group-item-title">7、小腿（腓肠肌）
+                                                </li>
+                                                <li class="radio-group-item">
+                                                    <a-radio-group
+                                                            v-model="typeThreeList.muscleconditionleg"
+                                                            :disabled="!!assessmentDetailId"
+                                                    >
+                                                        <a-radio v-for="item in typeThreeListData.twoKindsOf"
+                                                                 :value="item.id"
+                                                        >{{item.label}}
+                                                        </a-radio>
+                                                    </a-radio-group>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </a-row>
+                                    <hr>
+                                    <a-row type="flex" justify="space-between" align="middle">
+                                        <div class="radio-group-item-label">
+                                            <div class="text-align-center">液体状况</div>
+                                        </div>
+                                        <div class="radio-group-item-content">
+                                            <ul class="radio-group-list">
+                                                <li class="radio-group-item radio-group-item-title">1、踝水肿
+                                                </li>
+                                                <li class="radio-group-item">
+                                                    <a-radio-group
+                                                            v-model="typeThreeList.liquidstateankleedema"
+                                                            :disabled="!!assessmentDetailId"
+                                                    >
+                                                        <a-radio v-for="item in typeThreeListData.threeKindsOf"
+                                                                 :value="item.id"
+                                                        >{{item.label}}
+                                                        </a-radio>
+                                                    </a-radio-group>
+                                                </li>
+                                                <li class="radio-group-item radio-group-item-title">2、骶部水肿
+                                                </li>
+                                                <li class="radio-group-item">
+                                                    <a-radio-group
+                                                            v-model="typeThreeList.liquidstatesacraledema"
+                                                            :disabled="!!assessmentDetailId"
+                                                    >
+                                                        <a-radio v-for="item in typeThreeListData.twoKindsOf"
+                                                                 :value="item.id"
+                                                        >{{item.label}}
+                                                        </a-radio>
+                                                    </a-radio-group>
+                                                </li>
+                                                <li class="radio-group-item radio-group-item-title">3、腹水
+                                                </li>
+                                                <li class="radio-group-item">
+                                                    <a-radio-group
+                                                            v-model="typeThreeList.liquidstateascites"
+                                                            :disabled="!!assessmentDetailId"
+                                                    >
+                                                        <a-radio v-for="item in typeThreeListData.twoKindsOf"
+                                                                 :value="item.id"
+                                                        >{{item.label}}
+                                                        </a-radio>
+                                                    </a-radio-group>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </a-row>
+                                    <hr>
+                                    <ul class="radio-group-list">
+                                        <li class="radio-group-item radio-group-item-title">本项计分（以肌肉状况情况，主观计分）
+                                        </li>
+                                        <li class="radio-group-item">
+                                            <a-radio-group
+                                                    v-model="typeThreeList.liquidstateoveralledemaacore"
+                                                    :disabled="!!assessmentDetailId"
+                                            >
+                                                <a-radio v-for="item in typeThreeListData.liquidstateoveralledemaacore"
+                                                         :value="item.id"
+                                                >{{item.label}}
+                                                </a-radio>
+                                            </a-radio-group>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </a-row>
+                </div>
+                <br>
+                <ScreeningBottomInfo/>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    import ScreeningBasicInfo from '@/components/userList/screening/screeningBasicInfo.vue';
+    import ScreeningBottomInfo from '@/components/userList/screening/screeningBottomInfo.vue';
+    import { mapGetters, mapActions } from 'vuex';
+    import GoBackButton from '@/components/goBackButton.vue';
+    import { requestPatientSelectOnePatient } from '../../../api/userList/userList';
+    import { PatientAssessSelectAssesById } from '../../../api/userList/assessment';
+    import {
+        requestPatientAssessSaveMna,
+        requestPatientAssessSavePgsga,
+        requestPatientAssessSaveYbpgb
+    } from '../../../api/userList/assessment';
+    //  新增评估
+    export default {
+        components: {
+            GoBackButton,
+            ScreeningBasicInfo,
+            ScreeningBottomInfo,
+        },
+        computed: {
+            //  基础信息，请求来了就会出现数据
+            patientBasicInfo(){
+                return this.$store.state.userList.patientBasicInfo;
+            },
+            //  页面参数 - 病人id
+            patientId(){
+                return this.$route.params.patientId;
+            },
+            //  详情id
+            assessmentDetailId(){
+                return this.$route.params.assessmentDetailId;
+            },
+        },
+        data(){
+            return {
+                //  打印对象
+                printObj: {
+                    id: '#printContent',
+                    popTitle: '微型营养评价表',
+                },
+                //  表格类型
+                tableTypeSelect: 1,
+                //  类型1
+                typeOneList: [],
+                typeOneListData: [
+                    [
+                        { score: '0', id: '1', key: 1, label: '严重的食欲减退(0分)', },
+                        { score: '1', id: '2', key: 2, label: '中等程度食欲减退(1分)', },
+                        { score: '2', id: '3', key: 3, label: '食欲减退(2分)' },
+                    ],
+                    [
+                        { score: '0', id: '1', key: 1, label: '体重减轻超过(0分)', },
+                        { score: '1', id: '2', key: 2, label: '不清楚(1分)', },
+                        { score: '2', id: '3', key: 3, label: '体重减轻1～3kg(2分)' },
+                        { score: '3', id: '4', key: 4, label: '无体重下降(3分)' },
+                    ],
+                    [
+                        { score: '0', id: '1', key: 1, label: '卧床或长期坐着(0分)', },
+                        { score: '1', id: '2', key: 2, label: '能离床或椅子，但不能外出(1分)', },
+                        { score: '2', id: '3', key: 3, label: '能独立外出(2分)' }
+                    ],
+                    [
+                        { score: '0', id: '1', key: 1, label: '是(0分)', },
+                        { score: '2', id: '2', key: 2, label: '否(2分)', },
+                    ],
+                    [
+                        { score: '0', id: '1', key: 1, label: '严重痴呆或抑郁(0分)', },
+                        { score: '1', id: '2', key: 2, label: '轻度痴呆(1分)', },
+                        { score: '2', id: '3', key: 3, label: '无心理问题(2分)' },
+                    ],
+
+                    [
+                        { score: '0', id: '1', key: 1, label: '小于19(0分)', },
+                        { score: '1', id: '2', key: 2, label: '19-21(1分)', },
+                        { score: '2', id: '3', key: 3, label: '21～23(2分)' },
+                        { score: '3', id: '4', key: 4, label: '大于或等于23(3分)' },
+                    ],
+                    [
+                        { score: '0', id: '1', key: 1, label: '否(0分)', },
+                        { score: '1', id: '2', key: 2, label: '是(1分)', },
+                    ],
+                    [
+                        { score: '0', id: '1', key: 1, label: '是(0分)', },
+                        { score: '1', id: '2', key: 2, label: '否(1分)', },
+                    ],
+                    [
+                        { score: '0', id: '1', key: 1, label: '是(0分)', },
+                        { score: '1', id: '2', key: 2, label: '否(1分)', },
+                    ],
+                    [
+                        { score: '0', id: '1', key: 1, label: '1餐(0分)', },
+                        { score: '1', id: '2', key: 2, label: '2餐(1分)', },
+                        { score: '2', id: '3', key: 3, label: '3餐(2分)' },
+                    ],
+
+                    //  todo    蛋白质的摄入量是多少？
+                    //  每日至少1份奶制品（牛奶、奶酪、酸奶）?  A）是   B）否
+                    //  每周2-3份豆制品或鸡蛋?  A）是   B）否
+                    //  每日吃肉、鱼或家禽?  A）是   B）否
+                    //  0.0＝0或1个“是”  0.5＝2个“是”  1.0＝3个“是”
+
+                    [
+                        { score: '0', id: '1', key: 1, label: '否(0分)', },
+                        { score: '1', id: '2', key: 2, label: '是(1分)', },
+                    ],
+                    [
+                        { score: '0', id: '1', key: 1, label: '否(0分)', },
+                        { score: '1', id: '2', key: 2, label: '是(1分)', },
+                    ],
+                    [
+                        { score: '0', id: '1', key: 1, label: '否(0分)', },
+                        { score: '1', id: '2', key: 2, label: '是(1分)', },
+                    ],
+                    [
+                        { score: '0', id: '1', key: 1, label: '否(0分)', },
+                        { score: '1', id: '2', key: 2, label: '是(1分)', },
+                    ],
+                    [
+                        { score: '0', id: '1', key: 1, label: '小于3杯(0分)', },
+                        { score: '0.5', id: '2', key: 2, label: '3-5杯(0.5分)', },
+                        { score: '1', id: '3', key: 3, label: '大于5杯(1分)' },
+                    ],
+
+                    [
+                        { score: '0', id: '1', key: 1, label: '无法独立进食(0分)', },
+                        { score: '1', id: '2', key: 2, label: '独立进食稍有困难(1分)', },
+                        { score: '2', id: '3', key: 3, label: '完全独立进食(2分)' },
+                    ],
+                    [
+                        { score: '0', id: '1', key: 1, label: '营养不良(0分)', },
+                        { score: '1', id: '2', key: 2, label: '不能确定(1分)', },
+                        { score: '2', id: '3', key: 3, label: '营养良好(2分)' },
+                    ],
+                    [
+                        { score: '0', id: '1', key: 1, label: '不太好(0分)', },
+                        { score: '0.5', id: '2', key: 2, label: '不知道(0.5分)', },
+                        { score: '1', id: '3', key: 3, label: '一样好(1分)' },
+                        { score: '2', id: '4', key: 4, label: '更好(2分)' },
+                    ],
+                    [
+                        { score: '0', id: '1', key: 1, label: '小于21(0分)', },
+                        { score: '1', id: '2', key: 2, label: '21-22(1分)', },
+                        { score: '2', id: '3', key: 3, label: '大于等于22(2分)' },
+                    ],
+                    [
+                        { score: '0', id: '1', key: 1, label: '小于31(0分)', },
+                        { score: '1', id: '2', key: 2, label: '大于等于31(1分)', },
+                    ]
+                ],
+                //  类型2
+                typeTwoList: [],
+                //  类型2的模板
+                typeTwoListData: [
+                    [
+                        { label: '饱满（0分）', score: '0', id: '1', key: '1' },
+                        { label: '一般（1分）', score: '1', id: '2', key: '2' },
+                        { label: '一般差（2分）', score: '2', id: '3', key: '3' },
+                    ],
+                    [
+                        { label: '经口（0分）', score: '0', id: '1', key: '1' },
+                        { label: '鼻胃管（1分）', score: '1', id: '2', key: '2' },
+                        { label: '鼻肠管（2分）', score: '2', id: '3', key: '3' },
+                        { label: '禁食（3分）', score: '3', id: '4', key: '4' },
+                    ],
+                    [
+                        { label: '1 ~ 2次/每日（0分）', score: '0', id: '1', key: '1' },
+                        { label: '2 ~ 3天1次（1分）', score: '1', id: '2', key: '2' },
+                        { label: '3次及以上/每日（2分）', score: '2', id: '3', key: '3' },
+                        { label: '常年便秘，需要通便药物（3分）', score: '3', id: '4', key: '4' },
+                        { label: '1周1次（4分）', score: '4', id: '5', key: '5' },
+                    ],
+                    [
+                        { label: '呈球状（2分）', score: '2', id: '1', key: '1', },
+                        { label: '呈水状（2分）', score: '2', id: '2', key: '2', },
+                        { label: '呈泥状（2分）', score: '2', id: '3', key: '3', },
+                        { label: '呈半链状（1分）', score: '1', id: '4', key: '4', },
+                        { label: '呈块状（1分）', score: '1', id: '5', key: '5', },
+                        { label: '呈香蕉状（0分）', score: '0', id: '6', key: '6', },
+                    ],
+                    [
+                        { label: '腹胀（1分）', score: '1', id: '1', key: '1', },
+                        { label: '腹痛（2分）', score: '2', id: '2', key: '2', },
+                        { label: '无（0分）', score: '0', id: '3', key: '3', },
+                    ],
+                    [
+                        { label: '一天只能喝点纯液体的流食（4分）', score: '4', id: '1', key: '1' },
+                        { label: '一天喝三晚粥、烂面条或半流食，吃一点小菜，偶尔吃个鸡蛋、喝点奶，基本不吃肉（3分）', score: '3', id: '2', key: '2' },
+                        {
+                            label: '一天吃一餐比较正常的饮食，常在早餐或中餐，其他两餐仍然是以稀粥为主的半流食，有时能是1两肉、1个鸡蛋（2分）',
+                            score: '2',
+                            id: '3',
+                            key: '3'
+                        },
+                        { label: '一天可以吃两餐比较正常的饮食，会有一餐半流食或流食，肉在1 ~ 2两，少油脂（1分）', score: '1', id: '4', key: '4' },
+                        { label: '一天三餐基本正常，可以吃到5 ~ 6两主食，3两肉及相应的油脂，1个鸡蛋，奶及加餐水果（0分）', score: '0', id: '5', key: '5' },
+                    ]
+                ],
+                //  类型3
+                typeThreeList: {},
+                //  类型3的模板
+                typeThreeListData: {
+                    //  在过去的两周，患者的体重
+                    weightCondition: [
+                        { label: '减少（1分）', score: '1', id: '1', key: '1', },
+                        { label: '没有改变（0分）', score: '0', id: '2', key: '2', },
+                        { label: '增加（0分）', score: '0', id: '3', key: '3', },
+                    ],
+                    //  过去的1个月以来，患者的进食情况与平时情况相比（以最高分选项为本项计分）
+                    eatingSituation: [
+                        { label: '没有改变（0分）', score: '0', id: '1', key: '1', },
+                        { label: '比以前多（0分）', score: '0', id: '2', key: '2', },
+                        { label: '比以前少（1分）', score: '1', id: '3', key: '3', },
+                    ],
+                    //  患者目前进食
+                    eatingNow: [
+                        { label: '正常饮食（0分）', score: '0', id: '1', key: '1', },
+                        { label: '但比正常情况少(1分）', score: '1', id: '2', key: '2', },
+                        { label: '软饭（2分）', score: '2', id: '3', key: '3', },
+                        { label: '流食（3分）', score: '3', id: '4', key: '4', },
+                        { label: '只能进食营养制剂（4分）', score: '4', id: '5', key: '5', },
+                        { label: '只能通过管饲或静脉营养（0分）', score: '0', id: '6', key: '6', },
+                    ],
+
+                    //  1、近2周来，患者有以下的问题，影响患者摄入足够的饮食（多选，累计计分）⚠️
+                    symptom: [
+                        { label: '吃饭没有问题（0分）', score: '0', id: '1', key: '1', },
+                        { label: '恶心（1分）', score: '1', id: '2', key: '2', },
+                        { label: '便秘（1分）', score: '1', id: '3', key: '3', },
+                        { label: '口干（1分）', score: '1', id: '4', key: '4', },
+                        { label: '一会就吃不了（1分）', score: '1', id: '5', key: '5', },
+                        { label: '食品没味（1分）', score: '1', id: '6', key: '6', },
+                        { label: '食品气味不好（1分）', score: '1', id: '7', key: '7', },
+                        { label: '口腔溃疡（2分）', score: '2', id: '8', key: '8', },
+                        { label: '吞咽困难（2分）', score: '2', id: '9', key: '9', },
+                        { label: '没有食欲，不想吃（3分）', score: '3', id: '10', key: '10', },
+                        { label: '呕吐（3分）', score: '3', id: '11', key: '11', },
+                        { label: '腹泻（3分）', score: '3', id: '12', key: '12', },
+                        {
+                            label: '其他',
+                            score: '1',
+                            id: '13',
+                            key: '13',
+                            hasInput: true,
+                            input: '',
+                            placeholder: '其他原因',
+                            suffix: '（如抑郁、经济、牙齿）(1分)',
+                        },
+                        {
+                            label: '疼痛',
+                            score: '3',
+                            id: '14',
+                            key: '14',
+                            hasInput: true,
+                            input: '',
+                            placeholder: '疼痛部位',
+                            suffix: '（部位）（3分）',
+                        },
+                    ],
+
+                    //  活动和身体功能情况评估
+                    activityBodyfunction: [
+                        { label: '正常，无限制（0分）', score: '0', id: '1', key: '1', },
+                        { label: '不像往常，但是还能够起床进行轻微的活动（1分）', score: '1', id: '2', key: '2', },
+                        { label: '多数时候不想起床活动，但卧床或桌椅时间不超过半天（2分）', score: '2', id: '3', key: '3', },
+                        { label: '几乎干不了什么，一天大多是时间都卧床或坐在椅子上（3分）', score: '3', id: '4', key: '4', },
+                        { label: '几乎完全卧床，无法起床（3分）', score: '3', id: '5', key: '5', },
+                    ],
+
+                    //  相关诊断（特定，多选）⚠️
+                    disease: [
+                        {
+                            label: '癌症（1分）',
+                            score: '1',
+                            id: '1',
+                            key: '1',
+                            hasInput: true,
+                            input: '',
+                            placeholder: '请输入癌症类型',
+                        },
+                        { label: 'AIDS（1分）', score: '1', id: '2', key: '2' },
+                        { label: '呼吸或心脏病恶液质（1分）', score: '1', id: '3', key: '3' },
+                        { label: '存在开放性伤口或肠瘘或压疮（1分）', score: '1', id: '4', key: '4' },
+                        { label: '创伤（1分）', score: '1', id: '5', key: '5' },
+                    ],
+                    //  原发疾病分期⚠️
+                    diseaseStage: [
+                        { label: '1期', score: 0, id: '1', key: '1', },
+                        { label: '2期', score: 0, id: '2', key: '2', },
+                        { label: '3期', score: 0, id: '3', key: '3', },
+                        { label: '4期', score: 0, id: '4', key: '4', },
+                        { label: '其他', score: 0, id: '5', key: '5', hasInput: true, input: '', placeholder: '请输入其他', },
+                    ],
+
+                    //  发热
+                    hot: [
+                        { label: '无（0分）', score: '0', id: '1', key: '1' },
+                        { label: '37.2 ~ 38.3（1分）', score: '1', id: '2', key: '2' },
+                        { label: '38.3 ~ 38.8（2分）', score: '2', id: '3', key: '3' },
+                        { label: '> 38.8（3分）', score: '3', id: '4', key: '4' },
+                    ],
+                    //  持续发热时间
+                    lastHottime: [
+                        { label: '无（0分）', score: '0', id: '1', key: '1', },
+                        { label: '< 72小时（1分）', score: '1', id: '2', key: '2', },
+                        { label: '72小时（2分）', score: '2', id: '3', key: '3', },
+                        { label: '> 72小时（3分）', score: '3', id: '4', key: '4', },
+                    ],
+                    //  是否使用激素
+                    isuseHormone: [
+                        { label: '无（0分）', score: '0', id: '1', key: '1', },
+                        { label: '低剂量（< 10mg）（1分）', score: '1', id: '2', key: '2', },
+                        { label: '中剂量（10 ~ 30mg）（2分）', score: '2', id: '3', key: '3', },
+                        { label: '高剂量（>30mg）（3分）', score: '3', id: '4', key: '4', },
+                    ],
+
+                    //  4类【正常、轻度、中度、严重】
+                    fourKindsOf: [
+                        { label: '正常', score: '0', id: '1', key: '1' },
+                        { label: '轻度', score: '0', id: '2', key: '2' },
+                        { label: '中度', score: '0', id: '3', key: '3' },
+                        { label: '严重', score: '0', id: '4', key: '4' },
+                    ],
+                    //  3类
+                    threeKindsOf: [
+                        { label: '正常', score: '0', id: '1', key: '1' },
+                        { label: '轻度', score: '0', id: '2', key: '2' },
+                        { label: '中度', score: '0', id: '3', key: '3' },
+                    ],
+                    //  2类
+                    twoKindsOf: [
+                        { label: '正常', score: '0', id: '1', key: '1' },
+                        { label: '轻度', score: '0', id: '2', key: '2' },
+                    ],
+
+                    //  本项计分（以肌肉状况情况，主观计分）
+                    liquidstateoveralledemaacore: [
+                        { label: '0分', score: '0', id: '1', key: '1' },
+                        { label: '1分', score: '1', id: '2', key: '2' },
+                        { label: '2分', score: '2', id: '3', key: '3' },
+                        { label: '3分', score: '3', id: '4', key: '4' },
+                    ]
+                },
+            };
+        },
+        created(){
+            this.initList();
+            this.searchFn();
+        },
+        methods: {
+            ...mapActions('userList', [
+                //  保存病人信息，这是为了给组件用，而不是页面，所以要store
+                'setScreeningInfo',
+                //  保存病人信息，这是为了给组件用，而不是页面，所以要store
+                'setPatientBasicInfo',
+            ]),
+            initList(){
+                this.typeOneList = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},];
+                this.typeTwoList = [{}, {}, {}, {}, [], {},];
+                this.typeThreeList = {
+                    //  目前患者的身高约为
+                    nowWeight: '',
+                    nowHeight: '',
+                    //  一个月前患者的体重约为
+                    oneagoWeight: '',
+                    //  六个月前患者的体重约为
+                    sixagoWeight: '',
+                    //  在过去的两周，患者的体重
+                    weightCondition: '',
+
+                    //  过去的1个月以来，患者的进食情况与平时情况相比（以最高分选项为本项计分）
+                    eatingSituation: '',
+                    //  患者目前进食
+                    eatingNow: '',
+
+                    //  1、近2周来，患者有以下的问题，影响患者摄入足够的饮食（多选，累计计分）⚠️
+                    symptom: undefined,
+
+                    //  活动和身体功能情况评估
+                    activityBodyfunction: '',
+
+                    //  相关诊断（特定，多选）⚠️初始化啥也不要
+                    disease: undefined,
+                    //  年龄
+                    diseaseAge: '',
+                    //  原发疾病分期⚠️初始化啥也不要
+                    diseaseStage: undefined,
+                    //  放疗次数
+                    radiotherapyCount: '',
+
+                    //  发热
+                    hot: '',
+                    //  持续发热时间
+                    lastHottime: '',
+                    //  是否使用激素
+                    isuseHormone: '',
+
+                    //  眼眶脂肪垫
+                    fatreserveorbitalfatpad: '',
+                    //  三头肌皮褶厚度
+                    fatreservetricepsskinfold: '',
+                    //  下肋脂肪厚度
+                    fatreservelowerribfatthickness: '',
+                    //  总体脂肪缺乏程度
+                    fatreservetotalfatdeficiency: '',
+
+                    //  颞部（颞肌）
+                    muscleconditiontemporal: '',
+                    //  锁骨部位（胸部三角肌）
+                    muscleconditioncollarbone: '',
+                    //  肩部（三角肌）
+                    muscleconditionshoulder: '',
+                    //  肩胛部（北阔肌、斜方肌、三角肌）
+                    muscleconditionshoulderblade: '',
+
+                    //  手背骨间肌
+                    muscleconditiondorsalmuscleofTheBackOfTheHand: '',
+                    //  大腿（四头肌）
+                    muscleconditionthigh: '',
+                    //  小腿（腓肠肌）
+                    muscleconditionleg: '',
+
+                    //  踝水肿
+                    liquidstateankleedema: '',
+                    //  骶部水肿
+                    liquidstatesacraledema: '',
+                    //  腹水
+                    liquidstateascites: '',
+
+                    //  本项计分（以肌肉状况情况，主观计分）
+                    liquidstateoveralledemaacore: '',
+                };
+            },
+            //  主要请求
+            searchFn(){
+                //  重置头部信息
+                this.setScreeningInfo({ screeningBasicInfo: [] });
+                //  发请求
+                console.log('病人id', this.patientId);
+                //  请求头部数据
+                requestPatientSelectOnePatient(this.patientId)
+                    .then(v => {
+                        const { data } = v;
+                        this.setPatientBasicInfo(data);
+                        const screeningBasicInfo = [{
+                            key: 1,
+                            a: `姓名：${data.name}`,
+                            b: `性别：${data.sex === 1 ? '男' : '女'}`,
+                            c: `年龄：${data.birth}`,
+                            d: `身高：${data.height}cm`,
+                            e: `现体重：${data.weight}kg`,
+                            f: `BMI(kg/m2)：${data.bmi}`,
+                        }];
+                        const screenBottomData = {};
+                        this.setScreeningInfo({
+                            //  设置基础信息
+                            screeningBasicInfo,
+                            //  设置底部信息
+                            screenBottomData,
+                        });
+                    });
+                if (this.assessmentDetailId) {
+                    console.log('详情id ,有详情id的是编辑', this.assessmentDetailId);
+                    PatientAssessSelectAssesById(this.assessmentDetailId)
+                        .then(v => {
+                            const { data } = v;
+                            const {
+                                v20,
+                                weightCondition,
+                            } = data;
+
+                            //  微型营养评价表
+                            if (v20 !== undefined) {
+                                this.tableTypeSelect = 1;
+                                this.setOneData(data);
+                                this.$forceUpdate();
+                                return;
+                            }
+                            //  PG - SGA主观营养状况评估
+                            if (weightCondition !== undefined) {
+                                this.setThreeData(data);
+                                this.tableTypeSelect = 3;
+                                this.$forceUpdate();
+                                return;
+                            }
+                            //  一般评估表
+                            this.tableTypeSelect = 2;
+                            this.setTwoData(data);
+                            this.$forceUpdate();
+                        });
+                }
+            },
+            //  保存
+            saveScreening(){
+                console.log('保存');
+                const {
+                    birth: age,
+                    bmi,
+                    height,
+                    name,
+                    sex,
+                    weight,
+                } = this.patientBasicInfo;
+                const patientId = Number(this.patientId);
+                (() => {
+                    switch (this.tableTypeSelect) {
+                        case 1:
+                            //  微型营养评估表保存
+                            const oneData = this.oneDataTransform();
+                            console.log(oneData);
+                            return requestPatientAssessSaveMna(Object.assign({
+                                age, bmi, height, name, sex, weight, patientId,
+                            }, oneData));
+                        case 2:
+                            //  一般营养评估表保存
+                            const twoData = this.twoDataTransform();
+                            console.log(twoData);
+                            return requestPatientAssessSaveYbpgb(Object.assign({
+                                age, bmi, height, name, sex, weight, patientId,
+                            }, twoData));
+                        case 3:
+                            const threeData = this.threeDataTransform();
+                            const _threeData = Object.assign({}, this.typeThreeList, threeData);
+                            console.log(_threeData);
+                            console.log(JSON.stringify(_threeData));
+                            console.log(JSON.stringify(Object.assign({
+                                age, bmi, height, name, sex, weight, patientId,
+                            }, _threeData)));
+                            return requestPatientAssessSavePgsga(Object.assign({
+                                age, bmi, height, name, sex, weight, patientId,
+                            }, _threeData));
+                        default:
+                            throw new Error('错误的类型');
+                    }
+                })()
+                    .then(v => {
+                        this.$message.success('操作成功');
+                        this.$router.push({ name: 'assessment', params: { patientId: this.patientId.toString() } });
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        this.$message.error('操作失败');
+                    });
+            },
+
+            //  保存，类型1转换 微型营养评价表
+            oneDataTransform(){
+                let totalScore = 0;
+                const v1 = this.typeOneList[0];
+                const v2 = this.typeOneList[1];
+                const v3 = this.typeOneList[2];
+                const v4 = this.typeOneList[3];
+                const v5 = this.typeOneList[4];
+                const v6 = this.typeOneList[5];
+                const v7 = this.typeOneList[6];
+                const v8 = this.typeOneList[7];
+                const v9 = this.typeOneList[8];
+                const v10 = this.typeOneList[9];
+                const v11 = this.typeOneList[10];
+                const v12 = this.typeOneList[11];
+                const v13 = this.typeOneList[12];
+                const v14 = this.typeOneList[13];
+                const v15 = this.typeOneList[14];
+                const v16 = this.typeOneList[15];
+                const v17 = this.typeOneList[16];
+                const v18 = this.typeOneList[17];
+                const v19 = this.typeOneList[18];
+                const v20 = this.typeOneList[19];
+                totalScore += +(v1.score || 0);
+                totalScore += +(v2.score || 0);
+                totalScore += +(v3.score || 0);
+                totalScore += +(v4.score || 0);
+                totalScore += +(v5.score || 0);
+                totalScore += +(v6.score || 0);
+                totalScore += +(v7.score || 0);
+                totalScore += +(v8.score || 0);
+                totalScore += +(v9.score || 0);
+                totalScore += +(v10.score || 0);
+                console.log((+v11.score || 0), (+v12.score || 0), (+v13.score || 0));
+                //  ⚠️这里特殊
+                const subScore = (+v11.score || 0) + (+v12.score || 0) + (+v13.score || 0);
+                switch (subScore) {
+                    case 0:
+                    case 1:
+                        break;
+                    case 2:
+                        totalScore += 0.5;
+                        break;
+                    case 3:
+                        totalScore += 1;
+                        break;
+                    default:
+                        break;
+                }
+                totalScore += +(v14.score || 0);
+                totalScore += +(v15.score || 0);
+                totalScore += +(v16.score || 0);
+                totalScore += +(v17.score || 0);
+                totalScore += +(v18.score || 0);
+                totalScore += +(v19.score || 0);
+                totalScore += +(v20.score || 0);
+                return {
+                    v1: v1.id,
+                    v2: v2.id,
+                    v3: v3.id,
+                    v4: v4.id,
+                    v5: v5.id,
+                    v6: v6.id,
+                    v7: v7.id,
+                    v8: v8.id,
+                    v9: v9.id,
+                    v10: v10.id,
+                    v11: v11.id,
+                    v12: v12.id,
+                    v13: v13.id,
+                    v14: v14.id,
+                    v15: v15.id,
+                    v16: v16.id,
+                    v17: v17.id,
+                    v18: v18.id,
+                    v19: v19.id,
+                    v20: v20.id,
+                    totalScore,
+                };
+            },
+            //  赋值，微型营养评价表
+            setOneData(data){
+                console.log(data);
+                const { v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20 } = data;
+                this.typeOneList[0] = this.typeOneListData[0].filter(item => item.id === v1)[0];
+                this.typeOneList[1] = this.typeOneListData[1].filter(item => item.id === v2)[0];
+                this.typeOneList[2] = this.typeOneListData[2].filter(item => item.id === v3)[0];
+                this.typeOneList[3] = this.typeOneListData[3].filter(item => item.id === v4)[0];
+                this.typeOneList[4] = this.typeOneListData[4].filter(item => item.id === v5)[0];
+                this.typeOneList[5] = this.typeOneListData[5].filter(item => item.id === v6)[0];
+                this.typeOneList[6] = this.typeOneListData[6].filter(item => item.id === v7)[0];
+                this.typeOneList[7] = this.typeOneListData[7].filter(item => item.id === v8)[0];
+                this.typeOneList[8] = this.typeOneListData[8].filter(item => item.id === v9)[0];
+                this.typeOneList[9] = this.typeOneListData[9].filter(item => item.id === v10)[0];
+                this.typeOneList[10] = this.typeOneListData[10].filter(item => item.id === v11)[0];
+                this.typeOneList[11] = this.typeOneListData[11].filter(item => item.id === v12)[0];
+                this.typeOneList[12] = this.typeOneListData[12].filter(item => item.id === v13)[0];
+                this.typeOneList[13] = this.typeOneListData[13].filter(item => item.id === v14)[0];
+                this.typeOneList[14] = this.typeOneListData[14].filter(item => item.id === v15)[0];
+                this.typeOneList[15] = this.typeOneListData[15].filter(item => item.id === v16)[0];
+                this.typeOneList[16] = this.typeOneListData[16].filter(item => item.id === v17)[0];
+                this.typeOneList[17] = this.typeOneListData[17].filter(item => item.id === v18)[0];
+                this.typeOneList[18] = this.typeOneListData[18].filter(item => item.id === v19)[0];
+                this.typeOneList[19] = this.typeOneListData[19].filter(item => item.id === v20)[0];
+                console.log(JSON.parse(JSON.stringify(this.typeOneList)));
+            },
+            //  保存，类型2转换 一般评估表
+            twoDataTransform(){
+                let totalScore = 0;
+                const v1 = this.typeTwoList[0];
+                const v2 = this.typeTwoList[1];
+                const v3 = this.typeTwoList[2];
+                const v4 = this.typeTwoList[3];
+                const v5List = this.typeTwoList[4];
+                const v6 = this.typeTwoList[5];
+                totalScore += +(v1.score || 0);
+                totalScore += +(v2.score || 0);
+                totalScore += +(v3.score || 0);
+                totalScore += +(v4.score || 0);
+                const v5IdList = [];
+                let v5Score = 0;
+                v5List.forEach(item => {
+                    if (item.score > v5Score) {
+                        v5Score = +item.score;
+                    }
+                    v5IdList.push(item.id);
+                });
+                totalScore += v5Score;
+                totalScore += +(v6.score) || 0;
+                return {
+                    v1: v1.id, v2: v2.id, v3: v3.id, v4: v4.id,
+                    v5: v5IdList.join(','),
+                    v6: v6.id, totalScore,
+                };
+            },
+            //  一般评估表
+            setTwoData(data){
+                const { v1, v2, v3, v4, v5, v6 } = data;
+                this.typeTwoList[0] = this.typeTwoListData[0].filter(item => item.id === v1)[0];
+                this.typeTwoList[1] = this.typeTwoListData[1].filter(item => item.id === v2)[0];
+                this.typeTwoList[2] = this.typeTwoListData[2].filter(item => item.id === v3)[0];
+                this.typeTwoList[3] = this.typeTwoListData[3].filter(item => item.id === v4)[0];
+                this.typeTwoList[5] = this.typeTwoListData[5].filter(item => item.id === v6)[0];
+                //  console.log(this.typeTwoList);
+                //  console.log(v5);
+                //  多选那个地方
+                const v5Set = new Set(v5.split(','));
+                this.typeTwoList[4] = this.typeTwoListData[4].filter(item => v5Set.has(item.id));
+                //  console.log(this.typeTwoList[4]);
+                console.log(JSON.parse(JSON.stringify(this.typeTwoList)));
+            },
+
+            //  保存，类型3转换 PG - SGA主观营养状况评估
+            threeDataTransform(){
+                console.log('转换🍗');
+                const {
+                    symptom,
+                    disease,
+                    diseaseStage,
+                } = this.typeThreeList;
+                //  console.log(activityBodyfunction);
+                //  活动和身体功能评分
+                this.typeThreeListData.activityBodyfunction.forEach(item => {
+                    if (item.id === activityBodyfunction) {
+                        activityScore = item.score;
+                    }
+                });
+
+                //  1、近2周来，患者有以下的问题，影响患者摄入足够的饮食（多选，累计计分）
+                let threeScore = 0;
+                //  console.log(JSON.parse(JSON.stringify(this.typeThreeListData.symptom)));
+                const symptomSet = new Set(symptom);
+                let _symptom = (symptom || []).join(',').split(',');
+                this.typeThreeListData.symptom.forEach(item => {
+                    //  是否勾选？为了加分
+                    if (symptomSet.has(item.id)) {
+                        threeScore += +item.score;
+                        //  做[1,2,3]
+                        if (item.hasInput) {
+                            _symptom.push(`${item.id}:${item.input}`);
+                        }
+                    }
+                });
+                //  console.log(_symptom);
+                //  1、相关诊断（特定，多选）
+                //  console.log('🍉');
+                const diseaseSet = new Set(disease);
+                let diseaseHighScore = 0;
+                let _disease = (disease || []).join(',').split(',');
+                this.typeThreeListData.disease.forEach(item => {
+                    //  是否勾选？为了筛查高分
+                    if (diseaseSet.has(item.id)) {
+                        if (diseaseHighScore < item.score) {
+                            diseaseHighScore = item.score;
+                        }
+                        //  做[1,2,3]
+                        if (item.hasInput) {
+                            _disease.push(`${item.id}:${item.input}`);
+                        }
+                    }
+                });
+                //  console.log(diseaseHighScore);
+                //  console.log(_disease);
+                //  console.log('🍉');
+
+                //  3、原发疾病分期
+                const diseaseStageSet = new Set(diseaseStage);
+                let _diseaseStage = (diseaseStage || []).join(',').split(',');
+                this.typeThreeListData.diseaseStage.forEach(item => {
+                    //  是否勾选？
+                    if (diseaseStageSet.has(item.id)) {
+                        //  做[1,2,3]
+                        if (item.hasInput) {
+                            _diseaseStage.push(`${item.id}:${item.input}`);
+                        }
+                    }
+                });
+                //  console.log(_diseaseStage);
+
+                //  🌟🌟🌟🌟以下计算分数🌟🌟🌟🌟🌟
+                const {
+                    //  在过去的两周，患者的体重
+                    weightCondition,
+                    //  过去的1个月以来，我的进食情况与平时情况相比：
+                    eatingSituation,
+                    //  患者目前进食
+                    eatingNow,
+                    //  活动和身体功能情况评估
+                    activityBodyfunction,
+                    //  发热
+                    hot,
+                    //  持续发热时间
+                    lastHottime,
+                    //  是否使用激素
+                    isuseHormone,
+                    //  本项计分（以肌肉状况情况，主观计分）
+                    liquidstateoveralledemaacore,
+                } = this.typeThreeList;
+                const {
+                    //  在过去的两周，患者的体重
+                    weightCondition: _weightCondition,
+                    //  过去的1个月以来，我的进食情况与平时情况相比：
+                    eatingSituation: _eatingSituation,
+                    //  患者目前进食
+                    eatingNow: _eatingNow,
+                    //  活动和身体功能情况评估
+                    activityBodyfunction: _activityBodyfunction,
+                    //  发热
+                    hot: _hot,
+                    //  持续发热时间
+                    lastHottime: _lastHottime,
+                    //  是否使用激素
+                    isuseHormone: _isuseHormone,
+                    //  本项计分（以肌肉状况情况，主观计分）
+                    liquidstateoveralledemaacore: _liquidstateoveralledemaacore,
+                } = this.typeThreeListData;
+
+                //  体重评分
+                let weightScore = 0;
+                _weightCondition.forEach(item => {
+                    if (item.id === weightCondition) {
+                        weightScore = item.score;
+                    }
+                });
+                //  进食情况评分
+                let eatingScore = 0;
+                _eatingSituation.forEach(item => {
+                    if (item.id === eatingSituation) {
+                        eatingScore += +item.score;
+                    }
+                });
+                _eatingNow.forEach(item => {
+                    if (item.id === eatingNow) {
+                        eatingScore += +item.score;
+                    }
+                });
+                //  活动和身体功能评分
+                let activityScore = 0;
+                _activityBodyfunction.forEach(item => {
+                    if (item.id === activityBodyfunction) {
+                        activityScore = item.score;
+                    }
+                });
+
+                //  代谢方面需求评估评分
+                let metabolicScore = 0;
+                _hot.forEach(item => {
+                    if (item.id === hot) {
+                        metabolicScore += +item.score;
+                    }
+                });
+                _lastHottime.forEach(item => {
+                    if (item.id === lastHottime) {
+                        metabolicScore += +item.score;
+                    }
+                });
+                _isuseHormone.forEach(item => {
+                    if (item.id === isuseHormone) {
+                        metabolicScore += +item.score;
+                    }
+                });
+                //
+                let muscleconditiontotalmusclewastingScore = 0;
+                _liquidstateoveralledemaacore.forEach(item => {
+                    if (item.id === liquidstateoveralledemaacore) {
+                        muscleconditiontotalmusclewastingScore += +item.score;
+                    }
+                });
+//                console.log('🌟🌟🌟🌟以下计算分数🌟🌟🌟🌟🌟');
+//                console.log(weightScore);
+//                console.log(eatingScore);
+//                console.log(activityScore);
+//                console.log(metabolicScore);
+//                console.log(muscleconditiontotalmusclewastingScore);
+//
+//                console.log('🔘🔘🔘复杂的计算分数🔘🔘🔘');
+//                console.log(threeScore);
+//                console.log(diseaseHighScore);
+
+                //  总分
+                const totalScore = +threeScore + +diseaseHighScore + weightScore + +eatingScore + +activityScore + +metabolicScore + +muscleconditiontotalmusclewastingScore;
+                return {
+                    symptom: (_symptom && _symptom.join(',')) || '',
+                    disease: (_disease && _disease.join(',')) || '',
+                    diseaseStage: (_diseaseStage && _diseaseStage.join(',')) || '',
+                    threeScore,
+                    diseaseHighScore,
+                    weightScore,
+                    eatingScore,
+                    activityScore,
+                    metabolicScore,
+                    muscleconditiontotalmusclewastingScore,
+                    totalScore,
+                };
+            },
+            //  PG - SGA主观营养状况评估
+            setThreeData(data){
+                console.log(data);
+                //  我传的'4'，服务端返回的'4.0'
+                data.hot = (Math.trunc(data.hot || 0)).toString();
+                data.lastHottime = (Math.trunc(data.lastHottime || 0)).toString();
+                data.isuseHormone = (Math.trunc(data.isuseHormone || 0)).toString();
+                const {
+                    symptom,
+                    disease,
+                    diseaseStage,
+                } = data;
+                //  '13,14,13:23322,14:233232',
+                console.log(symptom);
+                //  '1,5,1:232'
+                console.log(disease);
+                //  '2,5,5:23'
+                console.log(diseaseStage);
+                delete data.symptom;
+                delete data.disease;
+                delete data.diseaseStage;
+                data.symptom = this.generalRecombination(symptom, this.typeThreeListData.symptom);
+                data.disease = this.generalRecombination(disease, this.typeThreeListData.disease);
+                data.diseaseStage = this.generalRecombination(diseaseStage, this.typeThreeListData.diseaseStage);
+                //  设置给这个对象
+                this.typeThreeList = data;
+                console.log(JSON.parse(JSON.stringify(this.typeThreeList)));
+            },
+
+            //  通用方法 用于处理字符串，分离勾选和input的复杂状态
+            generalRecombination(str, templateMapList){
+                const symptomPrimaryList = String(str || '').split(',');
+                let _list = [];
+                //  处理字符串，分离勾选和input的复杂状态
+                const _map = {};
+                symptomPrimaryList.forEach(item => {
+                    const index = item.indexOf(':');
+                    //  说明是普通数据
+                    if (index === -1) {
+                        _list.push(item);
+                        return;
+                    }
+                    const key = item.substr(0, index);
+                    const value = item.substr(index + 1);
+                    //  说明是有input数据
+                    _list.push(key);
+                    _map[key] = value;
+                });
+                //  console.log(_map);
+                //  设置input
+                templateMapList.forEach(item => {
+                    if (!item.hasInput) {
+                        return;
+                    }
+                    const inputValue = _map[item.id];
+                    if (inputValue) {
+                        item.input = inputValue;
+                    }
+                });
+                //  console.log(_list);
+                return _list;
+            },
+        },
+    };
+    '                                                                                                                                                                           con';
+</script>
+<style scoped>
+    @import "~@/css/custom.css";
+    
+    /*表头*/
+    .table-flex-title {
+        display: flex;
+        justify-content: flex-start;
+        line-height: 50px;
+        padding: 0;
+    }
+    
+    .table-flex-title > div {
+        padding: 0 16px;
+    }
+    
+    .table-flex-title > div:not(:last-child) {
+        border-right: 1px solid #e8e8e8;
+    }
+    
+    /*左侧的项*/
+    .radio-group-item-label > div {
+        padding: 10px;
+    }
+    
+    /*右侧内容，作为title了*/
+    .radio-group-item.radio-group-item-title {
+        background-color: #fafafa;
+    }
+</style>

@@ -1,0 +1,251 @@
+/*主要内容*/
+.layout-content {
+    background: white;
+    overflow: hidden;
+    flex: 1;
+}
+
+.layout-content-inner {
+    height: 100%;
+    position: relative;
+    overflow: auto;
+}
+
+.layout-content-inner-main {
+    padding: 24px;
+}
+
+
+/*特殊的表头是选择框的那种*/
+.custom-select-title-table .ant-table-bordered .ant-table-body > table {
+    border-top: none;
+    border-left: none;
+}
+
+/*特殊的表头是选择框的那种*/
+.custom-select-title-table .ant-table-thead > tr:first-child > th:last-child {
+    border-right: none;
+}
+
+/*特殊的表头是选择框的那种*/
+.custom-select-title-table .ant-table-bordered .ant-table-tbody > tr > td:last-child {
+    /*border-right: none;*/
+}
+
+/*特殊的表头是选择框的那种*/
+.custom-select-title-table .ant-table-bordered .ant-table-tbody > tr:last-child > td {
+    border-bottom: none;
+}
+
+/*特殊的表头是选择框的那种*/
+.custom-select-title-table .ant-table-bordered.ant-table-empty .ant-table-placeholder {
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+}
+
+/*表组的头*/
+.table-group-title {
+    height: 54px;
+    background-color: #fafafa;
+    border-bottom: 1px solid #e8e8e8;
+    padding: 0 16px;
+}
+
+/*仅仅不需要底部边框border-bottom*/
+.table-group-title.no-border-bottom {
+    border: 1px solid #e8e8e8;
+    border-bottom: none;
+}
+
+/*全部的border*/
+.table-group-title.all-border {
+    border: 1px solid #e8e8e8;
+}
+
+/*上传图片*/
+/*上传图片后的默认图*/
+.upload-default-img {
+    width: 100%;
+    display: block;
+}
+
+/*弹框里的表格的最大高度*/
+.table-in-box {
+    max-height: 500px;
+    overflow: auto;
+}
+
+/*穿梭框，第一个列表不要全部按钮 第一个按钮*/
+.ant-transfer .ant-transfer-list.ant-transfer-list-with-footer:first-child .ant-transfer-list-footer .ant-btn.ant-btn-sm {
+    visibility: hidden;
+}
+
+
+/*
+* 合并的表格
+*/
+/*负数的margin，主要用于表格*/
+.negative-margin-16 {
+    margin: -16px;
+}
+
+/*负数表格下的每一项*/
+.negative-margin-item {
+    border-bottom: 1px solid #e8e8e8;
+    display: block;
+    width: 100%;
+    /*line-height: 40px;*/
+    padding: 16px;
+}
+
+/*如果是，input，需要小一点*/
+.negative-margin-item.is-input {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.negative-margin-item:last-child {
+    border-bottom: none;
+}
+
+/*信息面板、描述面板的圆角*/
+.ant-descriptions-view {
+    border-radius: 0;
+}
+
+/*卡片头部*/
+.ant-card-head {
+    min-height: 40px;
+}
+
+/*卡片标题-文字*/
+.ant-card-head-title {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+/*卡片标题-额外的slot*/
+.ant-card-extra {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+/*卡片身体*/
+.ant-card-body {
+    padding: 16px;
+}
+
+
+/*描述列表 - 患者信息那块*/
+/*每一项*/
+.ant-descriptions-row .ant-descriptions-item-content {
+    height: 50px;
+}
+
+/*不同的大小，每行的数量*/
+.item-4 .ant-descriptions-row .ant-descriptions-item-content {
+    width: 13%;
+}
+
+/*不同的大小，每行的数量*/
+.item-3 .ant-descriptions-row .ant-descriptions-item-content {
+    width: 21%;
+}
+
+/*不同的大小，每行的数量*/
+.item-2 .ant-descriptions-row .ant-descriptions-item-content {
+    width: 27%;
+}
+
+/*p标签的大小*/
+.description-content {
+    line-height: 21px;
+    word-break: break-all;
+}
+
+/*这是为了打印背景色*/
+* {
+    -webkit-print-color-adjust: exact;
+}
+
+/*需要折行*/
+span.ant-radio + * {
+    white-space: initial;
+}
+
+/*分页*/
+.a-pagination {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+/*有病了？*/
+.ant-checkbox-wrapper + .ant-checkbox-wrapper {
+    margin-left: 0;
+}
+
+/*时间选择器的bug*/
+.ant-calendar-picker {
+    display: flex;
+}
+
+/*登录页面的选项卡*/
+.login-form .ant-tabs-bottom .ant-tabs-bottom-bar {
+    margin-top: 0;
+}
+
+/*table相关*/
+.ant-table table {
+    border-radius: 0;
+}
+
+/*.ant-table td {*/
+/*    white-space: nowrap;*/
+/*}*/
+
+/*历史记录组件*/
+.history-list .ant-tabs-nav .ant-tabs-tab {
+    margin-right: 0;
+}
+
+/*不折行*/
+.nowrap {
+    white-space: nowrap;
+}
+
+/*左侧菜单*/
+.ant-menu-vertical .ant-menu-item:not(:last-child), .ant-menu-vertical-left .ant-menu-item:not(:last-child), .ant-menu-vertical-right .ant-menu-item:not(:last-child), .ant-menu-inline .ant-menu-item:not(:last-child) {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 8px;
+}
+
+/*父级菜单展开后的阴影*/
+.ant-menu-dark .ant-menu-inline.ant-menu-sub {
+    box-shadow: 0 2px 8px rgba(81, 81, 103, 0.45) inset
+}
+
+/*父及菜单*/
+.ant-menu-vertical .ant-menu-item, .ant-menu-vertical-left .ant-menu-item, .ant-menu-vertical-right .ant-menu-item, .ant-menu-inline .ant-menu-item, .ant-menu-vertical .ant-menu-submenu-title, .ant-menu-vertical-left .ant-menu-submenu-title, .ant-menu-vertical-right .ant-menu-submenu-title, .ant-menu-inline .ant-menu-submenu-title {
+    margin-top: 4px;
+    margin-bottom: 0;
+}
+
+
+/*病人列表，处理页面滚动*/
+/*!*整体*!*/
+.patient-basic-info-like-wrap {
+    height: 100%;
+    overflow: hidden;
+    /*background-color: lightcoral;*/
+}
+
+/*主要填写内容部分*/
+.patient-basic-info-like {
+    height: calc(100% - 40px);
+    position: relative;
+    /*background-color: lightgreen;*/
+    overflow-y: auto;
+}
